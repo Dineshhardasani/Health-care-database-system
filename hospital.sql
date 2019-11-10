@@ -2,10 +2,10 @@
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Nov 09, 2019 at 06:20 PM
--- Server version: 5.7.26
--- PHP Version: 7.2.18
+-- Host: 127.0.0.1
+-- Generation Time: Nov 10, 2019 at 04:06 AM
+-- Server version: 10.1.39-MariaDB
+-- PHP Version: 7.3.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -28,14 +28,11 @@ SET time_zone = "+00:00";
 -- Table structure for table `attends`
 --
 
-DROP TABLE IF EXISTS `attends`;
-CREATE TABLE IF NOT EXISTS `attends` (
+CREATE TABLE `attends` (
   `patient_id` int(11) NOT NULL,
   `doctor_id` int(11) NOT NULL,
   `date` date NOT NULL,
-  `time` time NOT NULL,
-  PRIMARY KEY (`patient_id`,`doctor_id`,`date`),
-  KEY `doctor_id` (`doctor_id`)
+  `time` time NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -44,15 +41,13 @@ CREATE TABLE IF NOT EXISTS `attends` (
 -- Table structure for table `doctor`
 --
 
-DROP TABLE IF EXISTS `doctor`;
-CREATE TABLE IF NOT EXISTS `doctor` (
+CREATE TABLE `doctor` (
   `doctor_id` int(11) NOT NULL,
   `first_name` varchar(15) NOT NULL,
   `last_name` varchar(15) NOT NULL,
   `sex` char(1) NOT NULL,
   `blood_group` varchar(3) NOT NULL,
-  `email_id` varchar(50) NOT NULL,
-  PRIMARY KEY (`doctor_id`)
+  `email_id` varchar(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -61,12 +56,10 @@ CREATE TABLE IF NOT EXISTS `doctor` (
 -- Table structure for table `medicine`
 --
 
-DROP TABLE IF EXISTS `medicine`;
-CREATE TABLE IF NOT EXISTS `medicine` (
+CREATE TABLE `medicine` (
   `pharma_code` varchar(30) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `price` int(11) NOT NULL,
-  PRIMARY KEY (`pharma_code`)
+  `price` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -75,8 +68,7 @@ CREATE TABLE IF NOT EXISTS `medicine` (
 -- Table structure for table `patient`
 --
 
-DROP TABLE IF EXISTS `patient`;
-CREATE TABLE IF NOT EXISTS `patient` (
+CREATE TABLE `patient` (
   `patient_id` int(11) NOT NULL,
   `first_name` varchar(15) NOT NULL,
   `last_name` varchar(15) NOT NULL,
@@ -84,8 +76,16 @@ CREATE TABLE IF NOT EXISTS `patient` (
   `blood_group` varchar(3) NOT NULL,
   `admit_date` date DEFAULT NULL,
   `discharge_date` date DEFAULT NULL,
-  PRIMARY KEY (`patient_id`)
+  `Patient_email` varchar(36) NOT NULL,
+  `Password` text NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `patient`
+--
+
+INSERT INTO `patient` (`patient_id`, `first_name`, `last_name`, `sex`, `blood_group`, `admit_date`, `discharge_date`, `Patient_email`, `Password`) VALUES
+(5, 'Dinesh', 'Hardasani', 'M', 'B+', NULL, NULL, 'dineshhardasani2000@gmail.com', '$2y$10$mr5R/A929fhmD190sc0/FO/n/AX8kJMToV.XzGgVfV8VSC8rasFIi');
 
 -- --------------------------------------------------------
 
@@ -93,15 +93,13 @@ CREATE TABLE IF NOT EXISTS `patient` (
 -- Table structure for table `receptionist`
 --
 
-DROP TABLE IF EXISTS `receptionist`;
-CREATE TABLE IF NOT EXISTS `receptionist` (
+CREATE TABLE `receptionist` (
   `receptionist_id` int(11) NOT NULL,
   `first_name` varchar(15) NOT NULL,
   `last_name` varchar(15) NOT NULL,
   `sex` char(1) NOT NULL,
   `join_date` date NOT NULL,
-  `salary` int(11) NOT NULL,
-  PRIMARY KEY (`receptionist_id`)
+  `salary` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -110,15 +108,64 @@ CREATE TABLE IF NOT EXISTS `receptionist` (
 -- Table structure for table `records`
 --
 
-DROP TABLE IF EXISTS `records`;
-CREATE TABLE IF NOT EXISTS `records` (
+CREATE TABLE `records` (
   `record_no` int(11) NOT NULL,
   `patient_id` int(11) NOT NULL,
   `doctor_id` int(11) NOT NULL,
   `date` date NOT NULL,
-  `discharge_date` date NOT NULL,
-  PRIMARY KEY (`record_no`)
+  `discharge_date` date NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `attends`
+--
+ALTER TABLE `attends`
+  ADD PRIMARY KEY (`patient_id`,`doctor_id`,`date`),
+  ADD KEY `doctor_id` (`doctor_id`);
+
+--
+-- Indexes for table `doctor`
+--
+ALTER TABLE `doctor`
+  ADD PRIMARY KEY (`doctor_id`);
+
+--
+-- Indexes for table `medicine`
+--
+ALTER TABLE `medicine`
+  ADD PRIMARY KEY (`pharma_code`);
+
+--
+-- Indexes for table `patient`
+--
+ALTER TABLE `patient`
+  ADD PRIMARY KEY (`patient_id`);
+
+--
+-- Indexes for table `receptionist`
+--
+ALTER TABLE `receptionist`
+  ADD PRIMARY KEY (`receptionist_id`);
+
+--
+-- Indexes for table `records`
+--
+ALTER TABLE `records`
+  ADD PRIMARY KEY (`record_no`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `patient`
+--
+ALTER TABLE `patient`
+  MODIFY `patient_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
