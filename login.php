@@ -1,12 +1,5 @@
  <?php
       session_start();
-      if(isset($_SESSION['warning'])){
-        ?>
-        <div class="alert alert-warning">
-            <strong>Warning!</strong> Wrong Email address  or password
-        </div>
-        <?php
-      }
   ?>
 <html>
 <head>
@@ -67,7 +60,8 @@
                 <label class="custom-control-label" for="customCheck1">Remember password</label>
               </div>
               <button class="btn btn-lg btn-primary btn-block text-uppercase" name="Login" type="submit">Login</button>
-              <a class="tab-pane fade show active" name="btnAddMore" href="Signup.php">New User! Sign Up here</a>
+              <a class="tab-pane fade show active" name="btnAddMore" href="Signup.php">New User! Sign Up here</a>/
+              <a class="tab-pane fade show active" name="btnAddMore" href="receiptionist/login.php">Receptionist</a>
             </form>
           </div>
         </div>
@@ -89,8 +83,8 @@
         else{
           $row=mysqli_fetch_assoc($result);
             if(!password_verify($patient_password,$row['Password'])){
-              echo "Unsccessful";
                 $_SESSION['warning']="error";
+                echo $row['Password'];
               ?>
               <?php
             }
@@ -100,6 +94,7 @@
               $_SESSION['first_name']=$row['first_name'];
                 $_SESSION['last_name']=$row['last_name'];
               $_SESSION['patient_email']=$row['patient_email'];
+              echo $_SESSION['patient_email'];
               echo "<script>window.location.href='user.php';</script>";
               exit();
             }
