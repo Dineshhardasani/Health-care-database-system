@@ -33,7 +33,7 @@ if(isset($_SESSION['email'])){
         <a class="nav-item nav-link active" href="#" >Home </a>
         <a class="nav-item nav-link active" href="#Aboutus">About us</a>
         <a class="nav-item nav-link active" href="#">Doctors</a>
-        <a class="nav-item nav-link active" href="records.php">Records</a>
+        <a class="nav-item nav-link active" href="dashboard.php">Dashboard</a>
         <a class="nav-item nav-link active" href="#contact">Contact us</a>
         <a class="nav-item nav-link active" href="logout.php">Logout</a>
       </div>
@@ -86,7 +86,7 @@ if(isset($_SESSION['email'])){
 
     <div class="form-label-group">
       <label for="inputLastName">Pharma Code</label>
-      <input type="text" id="inputLastName" name="code" class="form-control" placeholder="Last Name" required autofocus>
+      <input type="text" id="inputLastName" name="code" class="form-control" placeholder="Pharma code" required autofocus>
     </div>
 
     <div class="form-label-group">
@@ -108,7 +108,6 @@ if(isset($_SESSION['email'])){
     $sql="SELECT * FROM `medicine` WHERE `pharma_code`='$code'";
     $result=mysqli_query($conn,$sql);
     if(mysqli_num_rows($result)>0){
-
     $query="INSERT INTO `bill` (`patient_email`,`amount`,`pharma_code`,`Date`,`Status`)
     VALUES ('$_POST[email]','$_POST[amount]','$_POST[code]','$date','$_POST[Status]')";
     $result=mysqli_query($conn,$query);
@@ -121,11 +120,7 @@ if(isset($_SESSION['email'])){
   ?>
 </div>
 </center>
-<!--footer-->
-<div id="footer">
-    <p>Website design by Dinesh Hardasani, Harsh Chourasiya,Rahul Barahpatre  |  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://www.facebook.com/profile.php?id=100007816428197" ><img src="Facebook.png"></a>&nbsp;&nbsp;&nbsp;&nbsp;<img src="download.jpg">&nbsp;&nbsp;&nbsp;<img src="twitter.png"><br>2019 </p>
-</div>
-        <!--end of footer-->
+
 </body>
 </html>
 <?php

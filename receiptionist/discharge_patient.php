@@ -1,3 +1,7 @@
+<?php
+session_start();
+if(isset($_SESSION['email'])){
+ ?>
 <html>
 <head>
   <title>Records</title>
@@ -26,12 +30,12 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
-        <a class="nav-item nav-link active" href="#" >Home </a>
-        <a class="nav-item nav-link active" href="#Aboutus">About us</a>
+        <a class="nav-item nav-link active" href="home.php" >Home </a>
+        <a class="nav-item nav-link active" href="home.php#Aboutus">About us</a>
         <a class="nav-item nav-link active" href="#">Doctors</a>
-        <a class="nav-item nav-link active" href="records.php">Records</a>
-        <a class="nav-item nav-link active" href="profile.php">Hi admin</a>
-        <a class="nav-item nav-link active" href="#contact">Contact us</a>
+        <a class="nav-item nav-link active" href="dashboard.php">Dashboard</a>
+        <a class="nav-item nav-link active" href="logout.php">Logout</a>
+        <a class="nav-item nav-link active" href="home.php#contact">Contact us</a>
       </div>
     </div>
   </nav><!--end of navbar-->
@@ -40,7 +44,7 @@
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" href="#">
+            <a class="nav-link active" href="dashboard.php">
               <span data-feather="home"></span>
               Dashboard <span class="sr-only">(current)</span>
             </a>
@@ -64,7 +68,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="discharge_patient.php">
+            <a class="nav-link" href="#">
               <span data-feather="bar-chart-2"></span>
               Discharge Patient
             </a>
@@ -84,16 +88,49 @@
   <?php
   if(isset($_POST['submit'])){
     $conn=mysqli_connect("localhost","root","","hospital");
-    $sql="SELECT SUM(amount) as amount FROM `bill` WHERE patient_email='2018081@iiitdmj.ac.in' AND Status='unpaid'";
+    $sql="SELECT SUM(amount) as amount FROM `bill` WHERE patient_email='$_POST[email]' AND Status='unpaid'";
     $result=mysqli_query($conn,$sql);
+    $amt=0;
     if(mysqli_num_rows($result)>0){
       while($row=mysqli_fetch_assoc($result)){
         if($row['amount']>0){
           echo "Sorry ! your bill is pending so you can not discharged";
+          ?>
+          <table class="table" border="1">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Pharma Code</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+                $sql="SELECT * FROM `bill` WHERE patient_email='$_POST[email]' AND Status='unpaid'";
+                $result=mysqli_query($conn,$sql);
+                while($row=mysqli_fetch_assoc($result)){
+                 ?>
+                 <tr>
+                   <th scope="row">1</th>
+                   <td><?php echo $row['pharma_code'];?></td>
+                   <td><?php echo $row['amount'];?></td>
+                 </tr>
+                 <?php
+                 $amt=$amt+$row['amount'];
+               }
+                ?>
+                <tr>
+                  <th></th>
+                  <th>Total</th>
+                  <td><?php echo $amt?></td>
+                </tr>
+              </tbody>
+            </table>
+            <?php
         }
         else{
           $date = date('Y-m-d');
-          $sql="UPDATE `records` SET `discharge_date`='$date'";
+          $sql="UPDATE `records` SET `discharge_date`='$date' WHERE patient_email='$_POST[email]'";
           mysqli_query($conn,$sql);
           echo "Discharge Successfully";
         }
@@ -101,41 +138,18 @@
     }
     else{
       echo "Sorry! Patient Not Found";
-      ?>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Email Id</th>
-            <th scope="col">Pharma Code</th>
-            <th scope="col">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-            while($row=mysqli_fetch_assoc($result)){
-             ?>
-             <tr>
-               <th scope="row">1</th>
-               <td><?php echo $row['patient_email']; ?></td>
-               <td><?php echo $row['pharma_code'];?></td>
-               <td><?php echo $row['amount'];?></td>
-             </tr>
-             <?php
-           }
-            ?>
-          </tbody>
-        </table>
-        <?php
-      }
+    }
   }
-   ?>
+?>
 
 </table>
 </center>
-<div id="footer">
-    <p>Website design by Dinesh Hardasani, Harsh Chourasiya,Rahul Barahpatre  |  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://www.facebook.com/profile.php?id=100007816428197" ><img src="Facebook.png"></a>&nbsp;&nbsp;&nbsp;&nbsp;<img src="download.jpg">&nbsp;&nbsp;&nbsp;<img src="twitter.png"><br>2019 </p>
-</div>
-        <!--end of footer-->
+
 </body>
 </html>
+<?php
+}
+else{
+  echo "<script>window.location.href='login.php';</script>";
+}
+ ?>

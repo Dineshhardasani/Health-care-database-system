@@ -33,8 +33,8 @@ if(isset($_SESSION['email'])){
         <a class="nav-item nav-link active" href="#" >Home </a>
         <a class="nav-item nav-link active" href="#Aboutus">About us</a>
         <a class="nav-item nav-link active" href="#">Doctors</a>
-        <a class="nav-item nav-link active" href="records.php">Records</a>
-        <a class="nav-item nav-link active" href="profile.php">Hi admin</a>
+        <a class="nav-item nav-link active" href="dashboard.php">Dashboard</a>
+        <a class="nav-item nav-link active" href="logout.php">Logout</a>
         <a class="nav-item nav-link active" href="#contact">Contact us</a>
       </div>
     </div>
@@ -90,27 +90,52 @@ if(isset($_SESSION['email'])){
     $sql="SELECT SUM(amount) as amount FROM `bill` WHERE patient_email='$_POST[email]' AND Status='unpaid'";
     $result=mysqli_query($conn,$sql);
     while($row=mysqli_fetch_assoc($result)){
-      echo "Your Total Pending Bill is ".$row['amount'];
+      $amt=0;
+      ?>
+      <table class="table" border="1">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Pharma Code</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+            $sql="SELECT * FROM `bill` WHERE patient_email='$_POST[email]' AND Status='unpaid'";
+            $result=mysqli_query($conn,$sql);
+            while($row=mysqli_fetch_assoc($result)){
+             ?>
+             <tr>
+               <th scope="row">1</th>
+               <td><?php echo $row['pharma_code'];?></td>
+               <td><?php echo $row['amount'];?></td>
+             </tr>
+             <?php
+             $amt=$amt+$row['amount'];
+           }
+            ?>
+            <tr>
+              <th></th>
+              <th>Total</th>
+              <td><?php echo $amt?></td>
+            </tr>
+          </tbody>
+        </table>
+        <?php
     }
+    $email=$_POST['email'];
     ?>
-    <form method="POST" >
+    <form method="POST" action="pay.php">
       <table>
-        <tr><td><button class="btn btn-lg btn-primary btn-block text-uppercase"  name="pay" type="submit">Pay</button></td></tr>
+        <tr><td><button class="btn btn-lg btn-primary btn-block text-uppercase" value=<?php echo $_POST['email']?>  name="pay" type="submit">Pay</button></td></tr>
       </table>
     </form>
     <?php
-      if(isset($_POST['pay'])){
-        $conn=mysqli_connect("localhost","root","","hospital");
-        $sql="UPDATE  `bill` SET Status='paid' WHERE patient_email='$_POST[email]' AND Status='unpaid'";
-        $result=mysqli_query($conn,$sql);
-      }
   }
   ?>
 </center>
-<div id="footer">
-    <p>Website design by Dinesh Hardasani, Harsh Chourasiya,Rahul Barahpatre  |  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://www.facebook.com/profile.php?id=100007816428197" ><img src="Facebook.png"></a>&nbsp;&nbsp;&nbsp;&nbsp;<img src="download.jpg">&nbsp;&nbsp;&nbsp;<img src="twitter.png"><br>2019 </p>
-</div>
-        <!--end of footer-->
+
 </body>
 </html>
 <?php

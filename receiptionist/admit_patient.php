@@ -5,11 +5,19 @@ if(isset($_SESSION['email'])){
 <html>
 <head>
   <title>Admit Patient</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <link rel="stylesheet" href="../style/style.css">
+  <script>
+    $( function() {
+      $( "#datepicker" ).datepicker({ minDate: 0});
+    } );
+    </script>
 </head>
 <body>
   <div class="header"><!--header-->
@@ -30,12 +38,12 @@ if(isset($_SESSION['email'])){
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
-        <a class="nav-item nav-link active" href="#" >Home </a>
-        <a class="nav-item nav-link active" href="#Aboutus">About us</a>
+        <a class="nav-item nav-link active" href="home.php" >Home </a>
+        <a class="nav-item nav-link active" href="home.php#Aboutus">About us</a>
         <a class="nav-item nav-link active" href="#">Doctors</a>
-        <a class="nav-item nav-link active" href="records.php">Records</a>
-        <a class="nav-item nav-link active" href="profile.php">Hi admin</a>
-        <a class="nav-item nav-link active" href="#contact">Contact us</a>
+        <a class="nav-item nav-link active" href="dashboard.php">Dashboard</a>
+        <a class="nav-item nav-link active" href="logout.php">Logout</a>
+        <a class="nav-item nav-link active" href="home.php#contact">Contact us</a>
       </div>
     </div>
   </nav><!--end of navbar-->
@@ -44,13 +52,13 @@ if(isset($_SESSION['email'])){
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" href="#">
+            <a class="nav-link active" href="dashboard.php">
               <span data-feather="home"></span>
               Dashboard <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="admit_patient.php">
+            <a class="nav-link" href="#">
               <span data-feather="file"></span>
               Admit Patient
             </a>
@@ -79,11 +87,13 @@ if(isset($_SESSION['email'])){
 <center>
 <form method="POST" >
   <table>
+    <tr><td><b> Patient Name: </b><input type="text" name="patient_name" placeholder="patient name" required autofocus></input></td></tr>
+    <br>
     <tr><td><b> Patient Email: </b><input type="email" name="patient_email" placeholder="patient email" required autofocus></input></td></tr>
     <br>
     <tr><td><b> Doctor Email: </b><input type="email" name="doctor_email" placeholder="doctor email" required autofocus></input></td></tr>
     <br>
-    <tr><td><b> Admit Date: </b><input type="date" name="date" placeholder="date" required autofocus></input></td></tr>
+    <tr><td><b> Admit Date: </b><input id="datepicker" name="date" required autofocus></input></td></tr>
     <br>
     <tr><td><button class="btn btn-lg btn-primary btn-block text-uppercase"  name="submit" type="submit">Enter</button></td></tr>
   </table>
@@ -91,15 +101,23 @@ if(isset($_SESSION['email'])){
   <?php
 
   if(isset($_POST['submit'])){
+    $cal_date=$_POST['date'];
+    $date=date('Y-m-d',strtotime($cal_date));
     $conn=mysqli_connect("localhost","root","","hospital");
-    $query="INSERT INTO `records` (`patient_email`,`doctor_email`,`date`) VALUES ('$_POST[patient_email]','$_POST[doctor_email]','$_POST[date]')";
-    $result=mysqli_query($conn,$query);
+    $query1="SELECT * FROM `records` WHERE patient_email='$_POST[patient_email]' AND discharge_date IS NULL";
+    $result=mysqli_query($conn,$query1);
+    if(mysqli_num_rows($result)==0){
+      $query2="INSERT INTO `records` (`patient_name`,`patient_email`,`doctor_email`,`admit_date`) VALUES ('$_POST[patient_name]','$_POST[patient_email]','$_POST[doctor_email]','$date')";
+      $result=mysqli_query($conn,$query2);
+      if($result){
+        echo "Admit Successfully";
+      }
+    }
+    else{
+      echo "Patient already Admit";
+    }
   }
   ?>
-<div id="footer">
-    <p>Website design by Dinesh Hardasani, Harsh Chourasiya,Rahul Barahpatre  |  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://www.facebook.com/profile.php?id=100007816428197" ><img src="Facebook.png"></a>&nbsp;&nbsp;&nbsp;&nbsp;<img src="download.jpg">&nbsp;&nbsp;&nbsp;<img src="twitter.png"><br>2019 </p>
-</div>
-        <!--end of footer-->
 </body>
 </html>
 <?php
