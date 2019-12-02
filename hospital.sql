@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 10, 2019 at 04:06 AM
+-- Generation Time: Dec 02, 2019 at 07:26 PM
 -- Server version: 10.1.39-MariaDB
 -- PHP Version: 7.3.5
 
@@ -29,11 +29,25 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `attends` (
-  `patient_id` int(11) NOT NULL,
-  `doctor_id` int(11) NOT NULL,
+  `patient_email` varchar(11) NOT NULL,
+  `doctor_email` varchar(36) NOT NULL,
   `date` date NOT NULL,
   `time` time NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bill`
+--
+
+CREATE TABLE `bill` (
+  `patient_email` varchar(36) NOT NULL,
+  `amount` int(11) DEFAULT NULL,
+  `pharma_code` varchar(30) NOT NULL,
+  `Date` datetime NOT NULL,
+  `Status` varchar(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -42,13 +56,28 @@ CREATE TABLE `attends` (
 --
 
 CREATE TABLE `doctor` (
-  `doctor_id` int(11) NOT NULL,
   `first_name` varchar(15) NOT NULL,
   `last_name` varchar(15) NOT NULL,
   `sex` char(1) NOT NULL,
   `blood_group` varchar(3) NOT NULL,
-  `email_id` varchar(50) NOT NULL
+  `email_id` varchar(50) NOT NULL,
+  `doctor_img` blob,
+  `password` text NOT NULL,
+  `qualification` longtext NOT NULL,
+  `category` varchar(36) NOT NULL,
+  `fees` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `doctor`
+--
+
+INSERT INTO `doctor` (`first_name`, `last_name`, `sex`, `blood_group`, `email_id`, `doctor_img`, `password`, `qualification`, `category`, `fees`) VALUES
+('Dinesh', 'Hardasani', 'm', 'O-', 'dineshhardasani2000@gmail.com', 0x75706c6f6164732f646f63746f72322e6a7067, '$2y$10$uFNW9fXSSiIhutCdpA7Et.2KScKhsb0kBUc8TzVNcC3bRXX73iN7m', 'MBBS', 'surgeon', 300),
+('Pranali', 'Sharma', 'm', 'B+', 'harsh@gmail.com', 0x75706c6f6164732f70686f746f2d313535393833393733342d3262373165613139376563322e6a7067, '$2y$10$XKzPevOR06fRuL7mnKA10uzdDfzLbIOCVJxs..4psVsCfSanCEX8.', 'MBBS', 'nephrologist', 500),
+('Rajat', 'Sharma', 'm', 'B+', 'rajat@gmail.com', 0x75706c6f6164732f70686f746f2d313535393833393733342d3262373165613139376563322e6a7067, '$2y$10$zjRn1wiFSt.NjLjArA8M8.U96bdqBqvT16a8DktihxJLPwy3kDVWu', 'MBBS', 'oncologist', 400),
+('Reena', 'Yadav', 'f', 'A-', 'reena@gmail.com', 0x75706c6f6164732f6161342e6a7067, '$2y$10$JK5hMqR2OkbkW7YXCnx0R.RMwmkFA8QMsBaDx6GivRp9G.NwW.aLm', 'MD', 'radiologist', 0),
+('Rina', 'Sharma', 'f', 'A+', 'rina@gmail.com', 0x75706c6f6164732f6161312e6a7067, '$2y$10$OLxbsKy1WpSzBkMQ/l7FL.9R7nbjBCth6JU7wa1jqrukgyyJRkCfy', 'MD', 'orthopedist', 300);
 
 -- --------------------------------------------------------
 
@@ -57,10 +86,22 @@ CREATE TABLE `doctor` (
 --
 
 CREATE TABLE `medicine` (
-  `pharma_code` varchar(30) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `price` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `pharma_code` varchar(36) NOT NULL,
+  `name` varchar(36) NOT NULL,
+  `amount` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `medicine`
+--
+
+INSERT INTO `medicine` (`pharma_code`, `name`, `amount`) VALUES
+('B201', 'Cold', 45),
+('B202', 'Cough', 50),
+('B301', 'Complain', 50),
+('B302', 'Asprin', 20),
+('D301', 'Paracetamol', 10),
+('D302', 'LICFREE-CT', 125);
 
 -- --------------------------------------------------------
 
@@ -69,7 +110,6 @@ CREATE TABLE `medicine` (
 --
 
 CREATE TABLE `patient` (
-  `patient_id` int(11) NOT NULL,
   `first_name` varchar(15) NOT NULL,
   `last_name` varchar(15) NOT NULL,
   `sex` char(1) NOT NULL,
@@ -84,8 +124,10 @@ CREATE TABLE `patient` (
 -- Dumping data for table `patient`
 --
 
-INSERT INTO `patient` (`patient_id`, `first_name`, `last_name`, `sex`, `blood_group`, `admit_date`, `discharge_date`, `Patient_email`, `Password`) VALUES
-(5, 'Dinesh', 'Hardasani', 'M', 'B+', NULL, NULL, 'dineshhardasani2000@gmail.com', '$2y$10$mr5R/A929fhmD190sc0/FO/n/AX8kJMToV.XzGgVfV8VSC8rasFIi');
+INSERT INTO `patient` (`first_name`, `last_name`, `sex`, `blood_group`, `admit_date`, `discharge_date`, `Patient_email`, `Password`) VALUES
+('Dinesh', 'Hardasani', 'm', 'B+', NULL, NULL, '2018081@iiitdmj.ac.in', '$2y$10$mk46K15AkrSXx8U0EThaqe55dPRIJBgGEHHz0wn/UpT1tR63tdpx2'),
+('Admin', 'Sharma', 'm', 'B+', NULL, NULL, 'admin@gmail.com', '$2y$10$NtEJ0/kcYbFejgEVFlKIrun7xS4V5PHsTg4eekzbagG81MzK0oj7m'),
+('Tarang', 'Khetan', 'm', 'O-', NULL, NULL, '2018383@iiitdmj.ac.in', '$2y$10$Cp7quDMv7B3CuVN.DTJTouxZMlD7.L0vX5Jb8X0.T4LskiYLXHgsS');
 
 -- --------------------------------------------------------
 
@@ -99,8 +141,17 @@ CREATE TABLE `receptionist` (
   `last_name` varchar(15) NOT NULL,
   `sex` char(1) NOT NULL,
   `join_date` date NOT NULL,
-  `salary` int(11) NOT NULL
+  `salary` int(11) NOT NULL,
+  `email` varchar(36) NOT NULL,
+  `password` varchar(36) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `receptionist`
+--
+
+INSERT INTO `receptionist` (`receptionist_id`, `first_name`, `last_name`, `sex`, `join_date`, `salary`, `email`, `password`) VALUES
+(1, 'Dinesh', 'Hardasani', 'M', '2019-11-12', 1400000, 'receptionist@gmail.com', '12345');
 
 -- --------------------------------------------------------
 
@@ -110,10 +161,11 @@ CREATE TABLE `receptionist` (
 
 CREATE TABLE `records` (
   `record_no` int(11) NOT NULL,
-  `patient_id` int(11) NOT NULL,
-  `doctor_id` int(11) NOT NULL,
-  `date` date NOT NULL,
-  `discharge_date` date NOT NULL
+  `patient_email` varchar(36) NOT NULL,
+  `doctor_email` varchar(36) NOT NULL,
+  `admit_date` date NOT NULL,
+  `discharge_date` date DEFAULT NULL,
+  `patient_name` varchar(36) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -124,14 +176,21 @@ CREATE TABLE `records` (
 -- Indexes for table `attends`
 --
 ALTER TABLE `attends`
-  ADD PRIMARY KEY (`patient_id`,`doctor_id`,`date`),
-  ADD KEY `doctor_id` (`doctor_id`);
+  ADD PRIMARY KEY (`patient_email`,`doctor_email`,`date`),
+  ADD KEY `doctor_id` (`doctor_email`);
+
+--
+-- Indexes for table `bill`
+--
+ALTER TABLE `bill`
+  ADD PRIMARY KEY (`patient_email`,`pharma_code`,`Date`),
+  ADD KEY `pharma_code` (`pharma_code`);
 
 --
 -- Indexes for table `doctor`
 --
 ALTER TABLE `doctor`
-  ADD PRIMARY KEY (`doctor_id`);
+  ADD PRIMARY KEY (`email_id`);
 
 --
 -- Indexes for table `medicine`
@@ -143,7 +202,7 @@ ALTER TABLE `medicine`
 -- Indexes for table `patient`
 --
 ALTER TABLE `patient`
-  ADD PRIMARY KEY (`patient_id`);
+  ADD PRIMARY KEY (`Patient_email`);
 
 --
 -- Indexes for table `receptionist`
@@ -155,17 +214,33 @@ ALTER TABLE `receptionist`
 -- Indexes for table `records`
 --
 ALTER TABLE `records`
-  ADD PRIMARY KEY (`record_no`);
+  ADD PRIMARY KEY (`record_no`,`patient_email`,`doctor_email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `patient`
+-- AUTO_INCREMENT for table `receptionist`
 --
-ALTER TABLE `patient`
-  MODIFY `patient_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `receptionist`
+  MODIFY `receptionist_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `records`
+--
+ALTER TABLE `records`
+  MODIFY `record_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bill`
+--
+ALTER TABLE `bill`
+  ADD CONSTRAINT `bill_ibfk_1` FOREIGN KEY (`pharma_code`) REFERENCES `medicine` (`pharma_code`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
