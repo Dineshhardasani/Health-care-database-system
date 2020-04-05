@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(isset($_SESSION['patient_email'])){
+//if(isset($_SESSION['patient_email'])){
 ?>
 <html>
 
@@ -33,16 +33,16 @@ if(isset($_SESSION['patient_email'])){
     <div class="navbar-nav ml-auto">
       <a class="nav-item nav-link active" href="#" >Home </a>
       <a class="nav-item nav-link active" href="#Aboutus">About us</a>
-      <a class="nav-item nav-link active" href="#">Doctors</a>
-           
+      <a class="nav-item nav-link active" href="doctor1.php">Doctors</a>
+      <a class="nav-item nav-link active" href="logout.php">Logout</a>
+
 <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Hello <?php echo $_SESSION['first_name']?>
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
     <a class="dropdown-item" href="profile.php">My Profile</a>
-    <a class="dropdown-item" href="logout">logout</a>
-   
+
   </div>
 </div>
 
@@ -53,13 +53,13 @@ if(isset($_SESSION['patient_email'])){
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img class="d-block w-100" width="100%" height="60%" src="doctor4.jpg" alt="First slide">
+      <img class="d-block w-100" width="100%" height="60%" src="images/img2.jpg" alt="First slide">
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" width="100%" height="60%" src="doctor4.jpg" alt="Second slide">
+      <img class="d-block w-100" width="100%" height="60%" src="images/img3.jpg" alt="Second slide">
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" width="100%" height="60%" src="doctor4.jpg" alt="Third slide">
+      <img class="d-block w-100" width="100%" height="60%" src="images/img1.jpg" alt="Third slide">
     </div>
   </div>
   <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -107,8 +107,8 @@ if(isset($_SESSION['patient_email'])){
 </body>
 </html>
 <?php
-}
-else{
- echo "<script>window.location.href='login.php';</script>";
-}
+//}
+//else{
+ //echo "<script>window.location.href='login.php';</script>";
+//}
 ?>
