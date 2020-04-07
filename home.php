@@ -34,7 +34,7 @@ session_start();
       <a class="nav-item nav-link active" href="#" >Home </a>
       <a class="nav-item nav-link active" href="#Aboutus">About us</a>
       <a class="nav-item nav-link active" href="doctor1.php">Doctors</a>
-      <a class="nav-item nav-link active" href="logout.php">Logout</a>
+     
 
 <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -42,6 +42,7 @@ session_start();
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
     <a class="dropdown-item" href="profile.php">My Profile</a>
+     <a class="dropdown-item" href="logout.php">Logout</a>
 
   </div>
 </div>
